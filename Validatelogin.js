@@ -2,6 +2,7 @@ const mysql = require('mysql');
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
+const port = process.env.port || 8080;
 
 var conn = mysql.createConnection({host:"database-web.mysql.database.azure.com",
 user:"lalo", password:"lD@rktim3s2k11", database:"nodelogin",
@@ -87,4 +88,4 @@ app.get('/homeq3', function(request, response) {
 	}
 });
 
-app.listen(3306);
+app.listen(port);
