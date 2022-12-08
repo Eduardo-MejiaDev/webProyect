@@ -1,15 +1,18 @@
-const mysql = require('mysql2');
+const mysql = require('mysql');
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
+const port = process.env.port || 8080;
 
-const connection = mysql.createConnection({
-	host     : '127.0.0.1',
-	user     : 'root',
-	password : 'lD@rktim3s2k11',
-	database : 'nodelogin'
-});
-
+var conn = mysql.createConnection({host:"database-web.mysql.database.azure.com",
+user:"lalo", password:"lD@rktim3s2k11", database:"nodelogin",
+ port:3306});
+// const connection = mysql.createConnection({
+// 	host     : '127.0.0.1',
+// 	user     : 'root',
+// 	password : 'lD@rktim3s2k11',
+// 	database : 'nodelogin'
+// });
 const app = express();
 
 app.use(session({
@@ -35,7 +38,7 @@ app.post('/auth', function(request, response) {
 	// Ensure the input fields exists and are not empty
 	if (username && password) {
 		// Execute SQL query that'll select the account from the database based on the specified username and password
-		connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
+		conn.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
 			// If there is an issue with the query, output the error
 			if (error) throw error;
 			// If the account exists
@@ -67,4 +70,22 @@ app.get('/home', function(request, response) {
 	//response.end();
 });
 
-app.listen(3306);
+app.get('/homeq2', function(request, response) {
+	// If the user is loggedin
+	if (request.session.loggedin) {
+		// Render home
+		//response.sendFile(path.join(__dirname + '/views/home.html'));
+		response.sendFile(path.join(__dirname + '/views/homeq2.html'))
+	}
+});
+
+app.get('/homeq3', function(request, response) {
+	// If the user is loggedin
+	if (request.session.loggedin) {
+		// Render home
+		//response.sendFile(path.join(__dirname + '/views/home.html'));
+		response.sendFile(path.join(__dirname + '/views/homeq3.html'))
+	}
+});
+
+app.listen(port);
