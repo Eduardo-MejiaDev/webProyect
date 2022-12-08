@@ -3,14 +3,15 @@ const express = require('express');
 const session = require('express-session');
 const path = require('path');
 
-
-const connection = mysql.createConnection({
-	host     : '127.0.0.1',
-	user     : 'root',
-	password : 'lD@rktim3s2k11',
-	database : 'nodelogin'
-});
-
+var conn = mysql.createConnection({host:"database-web.mysql.database.azure.com",
+user:"lalo", password:"lD@rktim3s2k11", database:"nodelogin",
+ port:3306});
+// const connection = mysql.createConnection({
+// 	host     : '127.0.0.1',
+// 	user     : 'root',
+// 	password : 'lD@rktim3s2k11',
+// 	database : 'nodelogin'
+// });
 const app = express();
 
 app.use(session({
@@ -36,7 +37,7 @@ app.post('/auth', function(request, response) {
 	// Ensure the input fields exists and are not empty
 	if (username && password) {
 		// Execute SQL query that'll select the account from the database based on the specified username and password
-		connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
+		conn.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
 			// If there is an issue with the query, output the error
 			if (error) throw error;
 			// If the account exists
